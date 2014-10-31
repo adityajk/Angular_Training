@@ -1,0 +1,31 @@
+<div ng-controller="hotelsController">
+Show hotels :<input type="checkbox" ng-model="showHotels"> <br>
+<div ng-repeat="hotel in hotels" ng-show="showHotels">
+		<div class="row well" ng-class="{'highlight': hotel.Price > 10000}">
+			<div class="col-md-2"><img  ng-src="images/{{hotel.img}}" width="200px"></div>
+			<div class="col-md-7">
+				<div>
+				<div class="col-md-7" ng-bind="(hotel.name | uppercase)"></div>
+				<div class="col-md-5" ng-bind="hotel.Price"></div>		
+			</div>
+			<div>
+				<div class="col-md-12 h4" ng-bind="hotel.description | limitTo:150"><span><a>...</a></span></div>
+
+			</div>
+			<div>
+				<h1 class="col-md-7" ng-bind="hotel.Location"></h1>
+				<h4 class="col-md-5" ng-bind="hotel.area | toFeet | number:2"></h4>		
+			</div>	
+
+			</div>
+
+			<div class="col-md-3">
+				<div><button type="button" ng-click="upRating(hotel)" class="btn btn-success"><span class="glyphicon glyphicon-hand-up"></span></button></div>
+				<div style="margin: 10px 0;">{{hotel.Rating || 0}}</div>
+				<div><button type="button" ng-click="downRating(hotel)" class="btn btn-danger"><span class="glyphicon glyphicon-hand-down"></span></button></div>
+			</div>
+			
+		</div>
+		<hr>
+	</div>
+</div>

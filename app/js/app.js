@@ -1,25 +1,54 @@
-angular.module('WellsFargo', []);
-angular.module('WellsFargo').controller('greetingController',
-function greetingController($scope, $timeout) {
+angular.module('WellsFargo', ['ngRoute']);
+
+angular.module('WellsFargo').config(['$routeProvider', function($routeProvider) {
+	$routeProvider.when('/addHotel', {
+		templateUrl: 'partials/addHotel.html',
+		controller: 'addHotelController'
+	}).
+	when('/listing', {
+		templateUrl: 'partials/hotelList.html',
+		controller: 'hotelsController'
+	})
+
+}]);
+
+angular.module('WellsFargo').filter('toFeet', function() {
+	return function(input) {
+		return input * 0.092903;
+	}
+});
+
+angular.module('WellsFargo').controller('greetingController', ['$scope', '$timeout',
+function($scope, $timeout) {
 	$scope.companyName = "Wells Fargo India";
 	//$scope.message = "Welcome"
 
 	$timeout(function() {
 		$scope.message = "Welcome"
 	}, 2000);
-});
+}]);
 
-angular.module('WellsFargo').controller('hotelsController',
-function hotelsController($scope) {
+angular.module('WellsFargo').controller('hotelsController', ['$scope', 'votingService', 'dataHotelService',
+function($scope, votingService, dataHotelService) {
+	
+	$scope.showHotels = true;	
+	
+	$scope.upRating = votingService.voteUp;
 
-	$scope.showHotels = true;
-	var hotels = [{"name": "Red Fox", "Location": "Hyderabad", "Price": 20000},
-					{"name": "Taj", "Location": "Mumbai", "Price": 7000},
-					{"name": "Hayaat", "Location": "Delhi", "Price": 12000}];
+	$scope.downRating = votingService.voteDown;
 
-	$scope.addHotel = function() {
-		var newHotel = {"name": $scope.name, "Location": $scope.location, "Price": $scope.price};
-		hotels.push(newHotel);	
-	}					
-	$scope.hotels = hotels;
-});
+	/*$scope.upRating = function(rateHotel) {
+		rateHotel.Rating = rateHotel.Rating || 0;
+		rateHotel.Rating++;
+	}
+
+	$scope.downRating = function(rateHotel) {
+		//if($rateHotel.Rating !== 0) {
+			rateHotel.Rating = rateHotel.Rating || 0;	
+			rateHotel.Rating--;
+		//}
+		
+	}	*/	
+	
+	$scope.hotels = dataHotelService.getHotels();
+}]);
